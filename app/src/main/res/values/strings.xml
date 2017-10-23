@@ -2,4 +2,6 @@
     <string name="app_name">Télécommande plateforme</string>
     <string name="action_settings">Settings</string>
     <string name="label_bluetooth_activity">Périphériques bluetooth</string>
+    <string name="label_transmission_activity">Transmission fichier</string>
+
 </resources>
