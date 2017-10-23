@@ -19,6 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".BluetoothDevicesActivity"
+            android:label="@string/label_bluetooth_activity"
+            ></activity>
     </application>
 
 </manifest>

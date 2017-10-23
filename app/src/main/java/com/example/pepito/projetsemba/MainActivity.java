@@ -1,5 +1,6 @@
 package com.example.pepito.projetsemba;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -37,7 +39,17 @@ public class MainActivity extends AppCompatActivity {
         fnListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         fnListView.setAdapter(fnArrayAdapter);
 
+        Button fileSelectButton = (Button) findViewById(R.id.button);
 
+        fileSelectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("file/*");
+                startActivity(intent);
+            }
+        });
 
 
 
@@ -60,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, BluetoothDevicesActivity.class);
+            startActivity(intent);
             return true;
         }
 
