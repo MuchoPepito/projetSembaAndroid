@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -206,13 +208,10 @@ public class BluetoothDevicesActivity extends AppCompatActivity {
 
         setState(STATE_CONNECTED);
         Log.d(tag, "socketokok");
-        try {
-            byte[] bytes = "test".getBytes("UTF-8");
-            write(bytes);
-            finish();
-        }catch(UnsupportedEncodingException e){
+        BluetoothService.setSocket(socket);
+        finish();
 
-        }
+
     }
 
     /**
