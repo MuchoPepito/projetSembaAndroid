@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,10 +28,14 @@ import java.util.UUID;
 
 public class BluetoothDevicesActivity extends AppCompatActivity {
     final String tag = MainActivity.class.getName();
+    private final static UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     protected List<String> dnList;
     protected Map<String, BluetoothDevice> devices;
     protected ListView dnListView;
     protected ArrayAdapter<String> dnArrayAdapter;
+
+    private boolean mAllowInsecureConnections;
+
 
     protected BluetoothAdapter bTAdapter;
 
@@ -43,6 +48,8 @@ public class BluetoothDevicesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_devices);
 
+        mAllowInsecureConnections = true;
+
         devices = new HashMap<>();
 
         dnList = new ArrayList<>();
@@ -51,7 +58,7 @@ public class BluetoothDevicesActivity extends AppCompatActivity {
         dnArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dnList);
         dnListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         dnListView.setAdapter(dnArrayAdapter);
-
+        Log.d("test", "bluetooth activity started");
 
         bTAdapter = BluetoothAdapter.getDefaultAdapter();
         // Phone does not support Bluetooth so let the user know and exit.
@@ -80,18 +87,20 @@ public class BluetoothDevicesActivity extends AppCompatActivity {
         /*IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         dnArrayAdapter.clear();
         registerReceiver(bReceiver, filter);
-        bTAdapter.startDiscovery();
+        bTAdapter.startDiscovery();*/
 
         dnListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d(tag, "device selected");
+
                 String deviceName = dnList.get(i);
                 BluetoothDevice chosenDevice = devices.get(deviceName);
-                /*ConnectThread connectThread = new ConnectThread(chosenDevice);
+                ConnectThread connectThread = new ConnectThread(chosenDevice);
                 connectThread.run();
 
             }
-        });*/
+        });
 
     }
 
@@ -108,10 +117,13 @@ public class BluetoothDevicesActivity extends AppCompatActivity {
                 }
             }
         }
-    };
+    };*/
 
     private void manageMyConnectedSocket(BluetoothSocket socket){
+
         Log.d(tag, "socketokok");
+        finish();
+
     }
 
     private class ConnectThread extends Thread {
@@ -125,18 +137,24 @@ public class BluetoothDevicesActivity extends AppCompatActivity {
             mmDevice = device;
 
             try {
-                // Get a BluetoothSocket to connect with the given BluetoothDevice.
-                // MY_UUID is the app's UUID string, also used in the server code.
-                tmp = device.
-            } catch (IOException e) {
-                Log.e(tag, "Socket's create() method failed", e);
+                if ( mAllowInsecureConnections ) {
+                    Method method;
+
+                    method = device.getClass().getMethod("createRfcommSocket", new Class[] { int.class } );
+                    tmp = (BluetoothSocket) method.invoke(device, 1);
+                }
+                else {
+                    tmp = device.createRfcommSocketToServiceRecord( MY_UUID );
+                }
+            } catch (Exception e) {
+                Log.e(tag, "create() failed", e);
             }
             mmSocket = tmp;
         }
 
         public void run() {
             // Cancel discovery because it otherwise slows down the connection.
-            bTAdapter.cancelDiscovery();
+            //bTAdapter.cancelDiscovery();
 
             try {
                 // Connect to the remote device through the socket. This call blocks
@@ -165,5 +183,5 @@ public class BluetoothDevicesActivity extends AppCompatActivity {
                 Log.e(tag, "Could not close the client socket", e);
             }
         }
-    }*/
+    }
 }
