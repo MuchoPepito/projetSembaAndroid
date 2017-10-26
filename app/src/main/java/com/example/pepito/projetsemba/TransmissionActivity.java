@@ -1,8 +1,11 @@
 package com.example.pepito.projetsemba;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -17,6 +20,8 @@ import java.io.IOException;
 public class TransmissionActivity extends AppCompatActivity {
 
     private File fileToSend;
+    private ProgressBar progressBar;
+    private TextView fileNameTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,10 +30,10 @@ public class TransmissionActivity extends AppCompatActivity {
         //TextView fileNameTextView = (TextView) findViewById(R.id.fileName);
         //fileNameTextView.setText("Fichier à transmettre");
 
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.setScaleY(3f);
-        progressBar.setProgress(65);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
         fileToSend = (File) getIntent().getExtras().get("fileToSend");
+        fileNameTextView = (TextView) findViewById(R.id.fileNameToTransmit);
 
 
     }
@@ -54,10 +59,28 @@ public class TransmissionActivity extends AppCompatActivity {
                 }
                 BluetoothService.write(bytes);
                 BluetoothService.close();
+                Message msg = handler.obtainMessage();
+                msg.what = TRANSFER_DONE;
+                handler.sendMessage(msg);
+
             }
         };
         uploadThread.start();
 
 
     }
+
+    private final int TRANSFER_DONE = 1;
+
+    final Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==TRANSFER_DONE){
+                fileNameTextView.setText("Fichier transmis.");
+                progressBar.setVisibility(View.GONE);
+            }
+            super.handleMessage(msg);
+        }
+    };
+
 }
