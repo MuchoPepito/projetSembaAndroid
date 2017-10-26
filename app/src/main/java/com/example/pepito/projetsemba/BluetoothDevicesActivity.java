@@ -209,6 +209,7 @@ public class BluetoothDevicesActivity extends AppCompatActivity {
         setState(STATE_CONNECTED);
         Log.d(tag, "socketokok");
         BluetoothService.setSocket(socket);
+        setResult(MainActivity.RESULT_OK, new Intent().putExtra("deviceName", device.getName()));
         finish();
 
 

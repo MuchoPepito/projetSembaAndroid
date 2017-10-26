@@ -1,8 +1,10 @@
 package com.example.pepito.projetsemba;
 
 import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,8 +12,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,9 +27,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     protected ListView fnListView;
     protected ArrayAdapter<String> fnArrayAdapter;
 
+    protected BluetoothSocket bluetoothSocket;
+
+    protected static final int BLUETOOTH_SOCKET_REQUEST = 1;
 
 
     @Override
@@ -43,12 +55,29 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+
 
         fnList = new ArrayList<>();
-        fnList.add("fichier 1");
-        fnList.add("fichier 2");
-        fnList.add("fichier 3");
-        fnList.add("fichier 4");
+
+        //String path = "/storage/emulated/0/DCIM/Camera/"
+        File sdCardRoot = Environment.getExternalStorageDirectory();
+        File pictureFolder = new File(sdCardRoot, Environment.DIRECTORY_DCIM + "/Camera/");
+        File[] pictures = pictureFolder.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File file, String s) {
+                return s.toLowerCase().endsWith("jpg");
+            }
+        });
+
+        final Map<String, File> hmPicture = new HashMap<>();
+
+        for(File picture : pictures)
+            if(picture.isFile()) {
+                fnList.add(picture.getName());
+                hmPicture.put(picture.getName(), picture);
+            }
+
 
         fnListView = (ListView) findViewById(R.id.listView);
         fnArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, fnList);
@@ -71,6 +100,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), TransmissionActivity.class);
+                String fileName = fnList.get(i);
+                File fileToSend = hmPicture.get(fileName);
+                intent.putExtra("fileToSend", fileToSend);
                 startActivity(intent);
 
             }
@@ -79,6 +111,24 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private static final int FILE_SELECT_CODE = 0;
+
+    private void showFileChooser() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+            startActivityForResult(
+                    Intent.createChooser(intent, "Select a File to Upload"),
+                    FILE_SELECT_CODE);
+        } catch (android.content.ActivityNotFoundException ex) {
+            // Potentially direct the user to the Market with a Dialog
+            Toast.makeText(this, "Please install a File Manager.",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -100,10 +150,26 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, BluetoothDevicesActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, BLUETOOTH_SOCKET_REQUEST);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == BLUETOOTH_SOCKET_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+                String deviceName = data.getStringExtra("deviceName");
+                Toast.makeText(this, "Connected to : " + deviceName,
+                        Toast.LENGTH_SHORT).show();
+                // Do something with the contact here (bigger example below)
+            }
+        }
     }
 }

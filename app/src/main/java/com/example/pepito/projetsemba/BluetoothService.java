@@ -27,8 +27,17 @@ public final class BluetoothService {
         try {
             bluetoothSocket.getOutputStream().write(buffer);
 
+
         } catch (IOException e) {
 
+        }
+    }
+
+    public static void close() {
+        try {
+            bluetoothSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
