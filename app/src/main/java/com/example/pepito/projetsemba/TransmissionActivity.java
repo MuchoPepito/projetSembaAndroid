@@ -3,6 +3,7 @@ package com.example.pepito.projetsemba;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -69,6 +70,8 @@ public class TransmissionActivity extends AppCompatActivity {
         uploadThread.start();
 
 
+
+
     }
 
     private final int TRANSFER_DONE = 1;
@@ -81,6 +84,8 @@ public class TransmissionActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
             }
             super.handleMessage(msg);
+            SystemClock.sleep(1000);
+            finish();
         }
     };
 
