@@ -27,10 +27,15 @@ public final class BluetoothService {
         try {
             bluetoothSocket.getOutputStream().write(buffer);
 
-
         } catch (IOException e) {
 
         }
+    }
+
+    public static boolean isConnected(){
+        if(bluetoothSocket != null)
+            return bluetoothSocket.isConnected();
+        return false;
     }
 
     public static void close() {

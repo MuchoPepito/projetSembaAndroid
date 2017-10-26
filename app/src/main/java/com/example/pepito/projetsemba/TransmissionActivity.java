@@ -58,6 +58,7 @@ public class TransmissionActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 BluetoothService.write(bytes);
+                //trouver alternative à close
                 BluetoothService.close();
                 Message msg = handler.obtainMessage();
                 msg.what = TRANSFER_DONE;

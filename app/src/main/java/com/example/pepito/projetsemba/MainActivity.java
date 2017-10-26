@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
     protected static final int BLUETOOTH_SOCKET_REQUEST = 1;
 
+    Button leftButton, rightButton, rmButton, leaveButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,30 +86,64 @@ public class MainActivity extends AppCompatActivity {
         fnListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         fnListView.setAdapter(fnArrayAdapter);
 
-        Button fileSelectButton = (Button) findViewById(R.id.button);
-
-        fileSelectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.setType("file/*");
-                startActivity(intent);
-            }
-        });
-
         fnListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getApplicationContext(), TransmissionActivity.class);
-                String fileName = fnList.get(i);
-                File fileToSend = hmPicture.get(fileName);
-                intent.putExtra("fileToSend", fileToSend);
-                startActivity(intent);
-
+                if(BluetoothService.isConnected()) {
+                    Intent intent = new Intent(getApplicationContext(), TransmissionActivity.class);
+                    String fileName = fnList.get(i);
+                    File fileToSend = hmPicture.get(fileName);
+                    intent.putExtra("fileToSend", fileToSend);
+                    startActivity(intent);
+                }else
+                    Toast.makeText(getApplicationContext(), "Not connected", Toast.LENGTH_SHORT).show();
             }
         });
 
+        rightButton = (Button) findViewById(R.id.rightButton);
+        leftButton = (Button) findViewById(R.id.leftButton);
+        rmButton = (Button) findViewById(R.id.rmButton);
+        leaveButton = (Button) findViewById(R.id.leaveButton);
+
+        rightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(BluetoothService.isConnected()) {
+
+                }else
+                    Toast.makeText(getApplicationContext(), "Not connected", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        leftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(BluetoothService.isConnected()) {
+
+                }else
+                    Toast.makeText(getApplicationContext(), "Not connected", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        rmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(BluetoothService.isConnected()) {
+
+                }else
+                    Toast.makeText(getApplicationContext(), "Not connected", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        leaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(BluetoothService.isConnected()) {
+
+                }else
+                    Toast.makeText(getApplicationContext(), "Not connected", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
 
