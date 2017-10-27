@@ -13,6 +13,7 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -58,9 +59,11 @@ public class TransmissionActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
                 BluetoothService.write(bytes);
+                //BluetoothService.write("endOfMessage\0".getBytes());
+                //BluetoothService.close();
                 //trouver alternative à close
-                BluetoothService.close();
                 Message msg = handler.obtainMessage();
                 msg.what = TRANSFER_DONE;
                 handler.sendMessage(msg);
@@ -84,6 +87,7 @@ public class TransmissionActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
             }
             super.handleMessage(msg);
+            //BluetoothService.write("endOfMessage\0".getBytes());
             SystemClock.sleep(1000);
             finish();
         }

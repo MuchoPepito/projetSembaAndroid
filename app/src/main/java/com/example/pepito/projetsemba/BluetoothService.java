@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Created by Pepito on 25/10/2017.
@@ -24,12 +25,17 @@ public final class BluetoothService {
     public static void write(byte[] buffer) {
         if(bluetoothSocket == null)
             return;
+        OutputStream outputStream;
         try {
-            bluetoothSocket.getOutputStream().write(buffer);
-
+            outputStream = bluetoothSocket.getOutputStream();
+            if(outputStream == null)
+                return;
+            outputStream.write(buffer);
         } catch (IOException e) {
 
         }
+
+        //signaler fin du message
     }
 
     public static boolean isConnected(){

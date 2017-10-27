@@ -90,10 +90,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(BluetoothService.isConnected()) {
+                    BluetoothService.write("uploadPhoto\0".getBytes());
                     Intent intent = new Intent(getApplicationContext(), TransmissionActivity.class);
                     String fileName = fnList.get(i);
                     File fileToSend = hmPicture.get(fileName);
                     intent.putExtra("fileToSend", fileToSend);
+
                     startActivity(intent);
                 }else
                     Toast.makeText(getApplicationContext(), "Not connected", Toast.LENGTH_SHORT).show();
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(BluetoothService.isConnected()) {
-
+                    BluetoothService.write("rightPhoto\0".getBytes());
                 }else
                     Toast.makeText(getApplicationContext(), "Not connected", Toast.LENGTH_SHORT).show();
             }
@@ -119,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(BluetoothService.isConnected()) {
-
+                    BluetoothService.write("leftPhoto\0".getBytes());
                 }else
                     Toast.makeText(getApplicationContext(), "Not connected", Toast.LENGTH_SHORT).show();
             }
@@ -129,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(BluetoothService.isConnected()) {
-
+                    BluetoothService.write("removePhoto\0".getBytes());
                 }else
                     Toast.makeText(getApplicationContext(), "Not connected", Toast.LENGTH_SHORT).show();
             }
@@ -139,7 +141,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(BluetoothService.isConnected()) {
-
+                    BluetoothService.write("leaveApp\0".getBytes());
+                    BluetoothService.close();
                 }else
                     Toast.makeText(getApplicationContext(), "Not connected", Toast.LENGTH_SHORT).show();
             }

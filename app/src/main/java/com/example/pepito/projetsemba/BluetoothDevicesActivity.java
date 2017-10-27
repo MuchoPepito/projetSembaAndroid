@@ -96,10 +96,6 @@ public class BluetoothDevicesActivity extends AppCompatActivity {
             startActivityForResult(enableBT, REQUEST_BLUETOOTH);
         }
 
-        for(BluetoothDevice btDevice : bTAdapter.getBondedDevices()) {
-            devices.put(btDevice.getName(), btDevice);
-            dnList.add(btDevice.getName());
-        }
 
         dnListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -113,6 +109,17 @@ public class BluetoothDevicesActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        dnList.clear();
+        for(BluetoothDevice btDevice : bTAdapter.getBondedDevices()) {
+            devices.put(btDevice.getName(), btDevice);
+            dnList.add(btDevice.getName());
+        }
+        dnArrayAdapter.notifyDataSetChanged();
     }
 
     /**
