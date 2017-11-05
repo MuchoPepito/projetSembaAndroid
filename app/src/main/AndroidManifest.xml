@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -25,8 +26,9 @@
         <activity
             android:name=".BluetoothDevicesActivity"
             android:label="@string/label_bluetooth_activity" />
-        <activity android:name=".TransmissionActivity"
-            android:label="@string/label_transmission_activity"></activity>
+        <activity
+            android:name=".TransmissionActivity"
+            android:label="@string/label_transmission_activity" />
     </application>
 
 </manifest>

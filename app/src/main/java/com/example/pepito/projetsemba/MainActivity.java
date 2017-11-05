@@ -202,12 +202,9 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == BLUETOOTH_SOCKET_REQUEST) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                // The user picked a contact.
-                // The Intent's data Uri identifies which contact was selected.
                 String deviceName = data.getStringExtra("deviceName");
                 Toast.makeText(this, "Connected to : " + deviceName,
                         Toast.LENGTH_SHORT).show();
-                // Do something with the contact here (bigger example below)
             }
         }
     }

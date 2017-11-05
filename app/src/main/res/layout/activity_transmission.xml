@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     tools:context="com.example.pepito.projetsemba.TransmissionActivity">
 
-    <include layout="@layout/content_transmission_activity" />
+    <include layout="@layout/content_transmission_activity"
+        tools:layout_editor_absoluteY="387dp"
+        tools:layout_editor_absoluteX="-191dp" />
 
 
 </android.support.constraint.ConstraintLayout>

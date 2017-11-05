@@ -33,7 +33,7 @@
             android:id="@+id/fileNameToTransmit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Fichier à transmettre"
+            android:text="Envoi du fichier en cours"
             android:gravity="center"
             android:textColor="@android:color/black"
             android:textSize="24sp"
@@ -42,14 +42,10 @@
 
         <ProgressBar
             android:id="@+id/progressBar"
-            android:gravity="center"
-            style="?android:attr/progressBarStyleHorizontal"
+            style="?android:attr/progressBarStyle"
             android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:maxHeight="60dp"
-            android:minHeight="60dp"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="206dp" />
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
